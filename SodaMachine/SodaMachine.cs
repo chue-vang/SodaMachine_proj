@@ -27,7 +27,7 @@ namespace SodaMachine
         public void FillRegister()
         {
             for (int i = 0; i < 20; i++)
-            {
+            {               
                 _register.Add(new Quarter());
             }
             for (int i = 0; i < 10; i++)
@@ -101,15 +101,6 @@ namespace SodaMachine
         //If the payment does not meet the cost of the soda: dispense payment back to the customer.
         private void CalculateTransaction(List<Coin> payment, Can chosenSoda, Customer customer)
         {
-
-
-
-
-
-
-
-
-
             //if (payment < chosenSoda.Price)
             //{
             //    Console.WriteLine("Returning money, inssufficient funds.");
@@ -136,9 +127,43 @@ namespace SodaMachine
         //Attempts to gather all the required coins from the sodamachine's register to make change.
         //Returns the list of coins as change to despense.
         //If the change cannot be made, return null.
-        private List<Coin> GatherChange(double changeValue)
+        public List<Coin> GatherChange(double changeValue)
         {
-            
+            List<Coin> gatherChangeList = new List<Coin>();
+            while (changeValue > 0)
+            {
+                if (changeValue / 0.25 >= 1 && RegisterHasCoin(name))
+                {
+                    GetCoinFromRegister(name);
+                    gatherChangeList.Add(name);
+                    changeValue -= 0.25;
+                }
+                else if (changeValue / 0.10 >= 1 && RegisterHasCoin(name))
+                {
+                    GetCoinFromRegister(name);
+                    gatherChangeList.Add(name);
+                    changeValue -= 0.10;
+                }
+                else if (changeValue / 0.05 >= 1 && RegisterHasCoin(name))
+                {
+                    GetCoinFromRegister(name);
+                    gatherChangeList.Add(name);
+                    changeValue -= 0.05;
+                }
+                else if (changeValue / 0.10 >= 1 && RegisterHasCoin(name))
+                {
+                    GetCoinFromRegister(name);
+                    gatherChangeList.Add(name);
+                    changeValue -= 0.10;
+                }
+                else if (changeValue / 0.01 >= 1 && RegisterHasCoin(name))
+                {
+                    GetCoinFromRegister(name);
+                    gatherChangeList.Add(name);
+                    changeValue -= 0.01;
+                }
+            }
+            return gatherChangeList;
         }
         //Reusable method to check if the register has a coin of that name.
         //If it does have one, return true.  Else, false.

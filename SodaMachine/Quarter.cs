@@ -13,7 +13,7 @@ namespace SodaMachine
         //Constructor (Spawner)
         public Quarter()
         {
-            
+
         }
 
         //Member Methods (Can Do)
