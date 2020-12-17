@@ -132,34 +132,24 @@ namespace SodaMachine
             List<Coin> gatherChangeList = new List<Coin>();
             while (changeValue > 0)
             {
-                if (changeValue / 0.25 >= 1 && RegisterHasCoin(name))
+                if (changeValue / 0.25 >= 1 && RegisterHasCoin("Quarter"))
                 {
-                    GetCoinFromRegister(name);
-                    gatherChangeList.Add(name);
+                    gatherChangeList.Add(GetCoinFromRegister("Quarter"));
                     changeValue -= 0.25;
                 }
-                else if (changeValue / 0.10 >= 1 && RegisterHasCoin(name))
+                else if (changeValue / 0.10 >= 1 && RegisterHasCoin("Dime"))
                 {
-                    GetCoinFromRegister(name);
-                    gatherChangeList.Add(name);
+                    gatherChangeList.Add(GetCoinFromRegister("Dime"));
                     changeValue -= 0.10;
                 }
-                else if (changeValue / 0.05 >= 1 && RegisterHasCoin(name))
-                {
-                    GetCoinFromRegister(name);
-                    gatherChangeList.Add(name);
+                else if (changeValue / 0.05 >= 1 && RegisterHasCoin("Nickel"))
+                {                    
+                    gatherChangeList.Add(GetCoinFromRegister("Nickel"));
                     changeValue -= 0.05;
                 }
-                else if (changeValue / 0.10 >= 1 && RegisterHasCoin(name))
+                else if (changeValue / 0.10 >= 1 && RegisterHasCoin("Penny"))
                 {
-                    GetCoinFromRegister(name);
-                    gatherChangeList.Add(name);
-                    changeValue -= 0.10;
-                }
-                else if (changeValue / 0.01 >= 1 && RegisterHasCoin(name))
-                {
-                    GetCoinFromRegister(name);
-                    gatherChangeList.Add(name);
+                    gatherChangeList.Add(GetCoinFromRegister("Penny"));
                     changeValue -= 0.01;
                 }
             }
@@ -171,7 +161,7 @@ namespace SodaMachine
         {
            foreach (Coin coin in _register)
             {
-                if (coin.Name == name)
+                if (coin.name == name)
                 {
                     return true;
                 }
@@ -184,7 +174,7 @@ namespace SodaMachine
         {
             foreach (Coin coin in _register)
             {
-                if (coin.Name == name)
+                if (coin.name == name)
                 {
                     _register.Remove(coin);
                     return coin;
