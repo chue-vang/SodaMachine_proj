@@ -10,7 +10,7 @@ namespace SodaMachine
     {
         //Member Variables (Has A)
         protected double value;
-        public string name;
+        public string Name;
 
         public double Value
         {
