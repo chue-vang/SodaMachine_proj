@@ -17,8 +17,6 @@ namespace SodaMachine
             Cola cola = new Cola();
             test.GatherCoinsFromWallet(cola);
 
-            //SodaMachine test = new SodaMachine();
-            //test.GatherChange(0.75);
         }
     }
 }
