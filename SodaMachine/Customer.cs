@@ -26,17 +26,43 @@ namespace SodaMachine
         //When all is said and done this method will return a list of coin objects that the customer will use a payment for their soda.
         public List<Coin> GatherCoinsFromWallet(Can selectedCan)
         {
-            List<Coin> gatherCoinsFromWalletList = new List<Coin>();
-            
-                if (selectedCan.Price > 0)
+            List<Coin> gatherCoins = new List<Coin>();
+            double gatherCoinsValue = 0;
+            string selectCoin;
+
+            while (gatherCoinsValue < selectedCan.Price)
+            {
+                selectCoin = UserInterface.CoinSelection(selectedCan, gatherCoins);
+                if (selectCoin == "Quarter")
                 {
-                    UserInterface.CoinSelection(selectedCan, gatherCoinsFromWalletList);
-                    gatherCoinsFromWalletList.Remove(GetCoinFromWallet("Quarter"));
-                    gatherCoinsFromWalletList.Remove(GetCoinFromWallet("Dime"));
-                    gatherCoinsFromWalletList.Remove(GetCoinFromWallet("Nickel"));
-                    gatherCoinsFromWalletList.Remove(GetCoinFromWallet("Penny"));
-                }            
-            return gatherCoinsFromWalletList;            
+                    Coin quarter = GetCoinFromWallet("Quarter");
+                    gatherCoins.Add(quarter);
+                    gatherCoinsValue += .25;
+                }
+                else if (selectCoin == "Dime")
+                {
+                    Coin dime = GetCoinFromWallet("Dime");
+                    gatherCoins.Add(dime);
+                    gatherCoinsValue += .10;
+                }
+                else if ( selectCoin == "Nickel")
+                {
+                    Coin nickel = GetCoinFromWallet("Nickel");
+                    gatherCoins.Add(nickel);
+                    gatherCoinsValue += .05;
+                }
+                else if (selectCoin == "Penny")
+                {
+                    Coin penny = GetCoinFromWallet("Penny");
+                    gatherCoins.Add(penny);
+                    gatherCoinsValue += .01;
+                }
+                else
+                {
+                    gatherCoins = null;
+                }
+            }
+            return gatherCoins;
         }
         //Returns a coin object from the wallet based on the name passed into it.
         //Returns null if no coin can be found

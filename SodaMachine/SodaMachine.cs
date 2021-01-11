@@ -76,8 +76,10 @@ namespace SodaMachine
         //pass payment to the calculate transaction method to finish up the transaction based on the results.
         private void Transaction(Customer customer)
         {
-
-
+            string selectSoda = UserInterface.SodaSelection(_inventory);
+            Can selectSodaFromInventory = GetSodaFromInventory(selectSoda);
+            List<Coin> payment = customer.GatherCoinsFromWallet(selectSodaFromInventory);
+            CalculateTransaction(payment, selectSodaFromInventory, customer);
         }
         //Gets a soda from the inventory based on the name of the soda.
         private Can GetSodaFromInventory(string nameOfSoda)
@@ -114,29 +116,30 @@ namespace SodaMachine
         //If the payment does not meet the cost of the soda: dispense payment back to the customer.
         private void CalculateTransaction(List<Coin> payment, Can chosenSoda, Customer customer)
         {
-           double paymentTotal = TotalCoinValue(payment);
-           if (paymentTotal > chosenSoda.Price && CheckSodaFromInventory(chosenSoda.Name))
+            double paymentTotal = TotalCoinValue(payment);
+            double registerSum = TotalCoinValue(_register);
+            double changeNeeded = Math.Round(DetermineChange(paymentTotal, chosenSoda.Price));
+
+           if (paymentTotal > chosenSoda.Price && registerSum > changeNeeded)
             {
-                GetSodaFromInventory(chosenSoda.Name);
-                DetermineChange(paymentTotal, chosenSoda.Price);
-                customer.AddCanToBackpack(chosenSoda);
+                DepositCoinsIntoRegister(payment);
+                customer.AddCanToBackpack(GetSodaFromInventory(chosenSoda.Name));
+                customer.AddCoinsIntoWallet(GatherChange(changeNeeded));
+                UserInterface.EndMessage(chosenSoda.Name, changeNeeded);
             }
-           else if (paymentTotal > chosenSoda.Price && RegisterHasCoin())
+           else if (paymentTotal > chosenSoda.Price && registerSum < changeNeeded)
             {
-                Console.WriteLine("Returning coins, insufficient change to dispense.");
-            }
-           else if (paymentTotal > chosenSoda.Price && CheckSodaFromInventory(chosenSoda.Name))
-            {
-                Console.WriteLine("Returning coins, soda selection not available.");
+                customer.AddCoinsIntoWallet(payment);
             }
            else if (paymentTotal == chosenSoda.Price)
             {
-                GetSodaFromInventory(chosenSoda.Name);
-                customer.AddCanToBackpack(chosenSoda);
+                DepositCoinsIntoRegister(payment);
+                customer.AddCanToBackpack(GetSodaFromInventory(chosenSoda.Name));
+                UserInterface.EndMessage(chosenSoda.Name, changeNeeded);
             }
            else if (paymentTotal < chosenSoda.Price)
             {
-                Console.WriteLine("Insufficient funds, returning coins");
+                customer.AddCoinsIntoWallet(payment);
             }                    
         }
         //Takes in the value of the amount of change needed.
