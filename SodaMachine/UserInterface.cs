@@ -178,8 +178,9 @@ namespace SodaMachine
         //Displays the total value of a list of coins.
         public static void DiplayTotalValueOfCoins(List<Coin> coinsToTotal)
         {
+            List<Coin> CoinsToTotal = new List<Coin>();
             double totalValue = 0;
-            foreach(Coin coin in coinsToTotal)
+            foreach (Coin coin in coinsToTotal)
             {
                 totalValue += coin.Value;
             }

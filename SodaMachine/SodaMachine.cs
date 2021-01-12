@@ -88,7 +88,6 @@ namespace SodaMachine
             {
                 if (can.Name == nameOfSoda)
                 {
-                    _inventory.Remove(can);
                     return can;
                 }
             }
@@ -118,7 +117,7 @@ namespace SodaMachine
         {
             double paymentTotal = TotalCoinValue(payment);
             double registerSum = TotalCoinValue(_register);
-            double changeNeeded = Math.Round(DetermineChange(paymentTotal, chosenSoda.Price));
+            double changeNeeded = Math.Round(DetermineChange(paymentTotal, chosenSoda.Price), 2);
 
            if (paymentTotal > chosenSoda.Price && registerSum > changeNeeded)
             {
@@ -148,31 +147,29 @@ namespace SodaMachine
         //If the change cannot be made, return null.
         public List<Coin> GatherChange(double changeValue)
         {
-            List<Coin> gatherChangeList = new List<Coin>();
-            while (changeValue > 0)
+            List<Coin> gatherChange = new List<Coin>();
+            double changeToDispense = TotalCoinValue(gatherChange);
+            double changeNeeded = changeValue - changeToDispense;
+            while (changeToDispense > changeValue)
             {
-                if (changeValue / 0.25 >= 1 && RegisterHasCoin("Quarter"))
+                if (changeValue >= 0.25 && RegisterHasCoin("Quarter"))
                 {
-                    gatherChangeList.Add(GetCoinFromRegister("Quarter"));
-                    changeValue -= 0.25;
+                    gatherChange.Add(GetCoinFromRegister("Quarter"));
                 }
-                else if (changeValue / 0.10 >= 1 && RegisterHasCoin("Dime"))
+                else if (changeValue >= 0.10 && RegisterHasCoin("Dime"))
                 {
-                    gatherChangeList.Add(GetCoinFromRegister("Dime"));
-                    changeValue -= 0.10;
+                    gatherChange.Add(GetCoinFromRegister("Dime"));
                 }
-                else if (changeValue / 0.05 >= 1 && RegisterHasCoin("Nickel"))
-                {                    
-                    gatherChangeList.Add(GetCoinFromRegister("Nickel"));
-                    changeValue -= 0.05;
-                }
-                else if (changeValue / 0.10 >= 1 && RegisterHasCoin("Penny"))
+                else if (changeValue >= 0.05 && RegisterHasCoin("Nickel"))
                 {
-                    gatherChangeList.Add(GetCoinFromRegister("Penny"));
-                    changeValue -= 0.01;
+                    gatherChange.Add(GetCoinFromRegister("Nickel"));
+                }
+                else if (changeValue >= 0.10 && RegisterHasCoin("Penny"))
+                {
+                    gatherChange.Add(GetCoinFromRegister("Penny"));
                 }
             }
-            return gatherChangeList;
+            return gatherChange;
         }
         //Reusable method to check if the register has a coin of that name.
         //If it does have one, return true.  Else, false.
@@ -195,7 +192,6 @@ namespace SodaMachine
             {
                 if (coin.Name == name)
                 {
-                    _register.Remove(coin);
                     return coin;
                 }
             }

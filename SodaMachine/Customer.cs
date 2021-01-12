@@ -68,11 +68,11 @@ namespace SodaMachine
         //Returns null if no coin can be found
         public Coin GetCoinFromWallet(string coinName)
         {
-            foreach (Coin coin in Wallet.Coins)
+            for (var i = 0; i < Wallet.Coins.Count; i++)
             {
-                if (coin.Name == coinName)
+                if (coinName == Wallet.Coins[i].Name)
                 {
-                    Wallet.Coins.Remove(coin);
+                    return Wallet.Coins[i];
                 }
             }
             return null;
